@@ -19,8 +19,24 @@
 #define     P_CREATED   "2010-10"
 #define     P_DEPENDS   "yEXEC, ySTR"
 
-#define     P_VERNUM    "2.0b"
-#define     P_VERTXT    "added standard prog functions and debugging protection"
+#define     P_VERNUM    "2.0c"
+#define     P_VERTXT    "updated daemon process, non-duplication, and cleaned up PROG"
+
+#define     P_SUMMARY   \
+ "kharon is a very specialized part of the init process, which handles¦" \
+ "the collection of completed, killed, dead, and zombie processes during¦" \
+ "normal operation of the system.¦"
+
+#define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
+#define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
+#define     P_REMINDER  "i know there are many better options, but i *own* this one"
+
+#define     P_ASSUME    \
+ "-- all init startup operations handled by eos (rosy-fingered dawn)¦" \
+ "-- all init shutdown operations handled by astraios (starry one)¦" \
+ "-- all init resurrection operations handled by haides¦" \
+ "-- zero configuration and limited command line options¦" \
+ "-- communication of state changes through signals, not fifo or pipe¦"
 
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
@@ -190,12 +206,7 @@ typedef const  int       cint;
 typedef const  long      clong;
 typedef const  char      cchar;
 
-typedef struct FILE      tFILE;
-typedef struct stat      tSTAT;
-typedef struct passwd    tPASSWD;
-typedef struct group     tGROUP;
 typedef struct rusage    tRUSAGE;
-typedef struct tm        tTIME;
 typedef struct dirent    tDIRENT;
 
 
@@ -203,13 +214,20 @@ typedef struct dirent    tDIRENT;
 
 /*---(program)--------------*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+/*---(support)-----------------*/
 char*       PROG_version            (void);
+char        PROG_vershow            (void);
+char        PROG_about              (void);
+/*---(startup)-----------------*/
 char        PROG_preinit            (void);
 char        PROG_init               (void);
 char        PROG_args               (int a_argc, char *a_argv[]);
 char        PROG_begin              (void);
-char        PROG_final              (void);
+char        PROG_visual             (void);
+/*---(specialty)---------------*/
 void        PROG_signal             (int a_signal, siginfo_t *a_info, void *a_nada);
+char        PROG_daemon             (void);
+/*---(shutdown)----------------*/
 char        PROG_end                (void);
 
 

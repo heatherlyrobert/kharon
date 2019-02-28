@@ -8,9 +8,9 @@ tACCESSOR   my;
 
 
 /*====================------------------------------------====================*/
-/*===----                   standard program functions                 ----===*/
+/*===----                         support functions                    ----===*/
 /*====================------------------------------------====================*/
-static void      o___PROGRAM_________________o (void) {;}
+static void      o___SUPPORT_________________o (void) {;}
 
 char*        /*--: return versioning information ---------[ leaf-- [ ------ ]-*/
 PROG_version       (void)
@@ -30,6 +30,65 @@ PROG_version       (void)
    snprintf (my.version, 200, "%s   %s : %s", t, P_VERNUM, P_VERTXT);
    return my.version;
 }
+
+char
+PROG_vershow       (void)
+{
+   printf ("%s\n", PROG_version ());
+   exit (0);
+}
+
+char             /* [------] display usage help information ------------------*/
+PROG_about         (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         i           =    0;
+   char        t           [LEN_RECD];
+   int         x_len       =    0;
+   /*---(display)----------+-----+-----+-*/
+   printf("\n");
+   printf("focus     : %s\n", P_FOCUS);
+   printf("niche     : %s\n", P_NICHE);
+   printf("purpose   : %s\n", P_PURPOSE);
+   printf("\n");
+   printf("namesake  : %s\n", P_NAMESAKE);
+   printf("heritage  : %s\n", P_HERITAGE);
+   printf("imagery   : %s\n", P_IMAGERY);
+   printf("\n");
+   printf("system    : %s\n", P_SYSTEM);
+   printf("language  : %s\n", P_LANGUAGE);
+   printf("codesize  : %s\n", P_CODESIZE);
+   printf("\n");
+   printf("author    : %s\n", P_AUTHOR);
+   printf("created   : %s\n", P_CREATED);
+   printf("depends   : %s\n", P_DEPENDS);
+   printf("\n");
+   printf("ver num   : %s\n", P_VERNUM);
+   printf("ver txt   : %s\n", P_VERTXT);
+   printf("\n");
+   strcpy (t, P_SUMMARY);
+   x_len = strlen (t);
+   for (i = 0; i < x_len; ++i)   if (t [i] == '¦')  t [i] = '\n';
+   printf ("%s\n", t);
+   printf("priority  : %s\n", P_PRIORITY);
+   printf("principal : %s\n", P_PRINCIPAL);
+   printf("reminder  : %s\n", P_REMINDER);
+   printf("\n");
+   printf("simplifying assumptions\n");
+   strcpy (t, P_ASSUME);
+   x_len = strlen (t);
+   for (i = 0; i < x_len; ++i)   if (t [i] == '¦')  t [i] = '\n';
+   printf ("%s\n", t);
+   printf("\n");
+   exit (0);
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                        program startup                       ----===*/
+/*====================------------------------------------====================*/
+static void      o___STARTUP_________________o (void) {;}
 
 char         /*--> pre-debugging code --------------------[ leaf   [ ------ ]-*/
 PROG_preinit       (void)
@@ -66,11 +125,6 @@ PROG_init          (void)
    DEBUG_TOPS   yLOG_value   ("ppid"      , my.ppid);
    DEBUG_TOPS   yLOG_value   ("uid"       , my.uid);
    DEBUG_TOPS   yLOG_info    ("who"       , my.who);
-   /*---(check for root)-----------------*/
-   --rce;  if (my.uid != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
    /*---(defaults)-----------------------*/
    my.delay    = 15;
    /*---(complete)-----------------------*/
@@ -95,10 +149,12 @@ PROG_args          (int a_argc, char *a_argv [])
       if (a[0] == '@')       continue;
       /*---(process)---------------------*/
       DEBUG_ARGS   yLOG_info    ("argument"  , a);
-      if      (strncmp (a, "--rapid"     , 12) == 0)     my.delay   =   1;
-      else if (strncmp (a, "--moderate"  , 12) == 0)     my.delay   =   5;
-      else if (strncmp (a, "--leisurely" , 12) == 0)     my.delay   =  15;
-      else if (strncmp (a, "--passive"   , 12) == 0)     my.delay   = 300;
+      if      (strcmp (a, "--version"     ) == 0)   PROG_vershow ();
+      else if (strcmp (a, "--about"       ) == 0)   PROG_about   ();
+      else if (strcmp (a, "--rapid"       ) == 0)   my.delay   =   1;
+      else if (strcmp (a, "--moderate"    ) == 0)   my.delay   =   5;
+      else if (strcmp (a, "--leisurely"   ) == 0)   my.delay   =  15;
+      else if (strcmp (a, "--passive"     ) == 0)   my.delay   = 300;
       else    continue;
       /*---(done)------------------------*/
       ++n;
@@ -119,13 +175,6 @@ PROG_begin         (void)
    char        rc          =    0;
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
-   /*---(daemonize)-----------------------------*/
-   rc = yEXEC_daemon (yURG_debug.logger, &my.pid);
-   DEBUG_TOPS   yLOG_value   ("daemonize" , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
    /*---(setup signals)-------------------------*/
    DEBUG_TOPS   yLOG_note    ("signals set to bullet-proof (dangerous)");
    rc = yEXEC_signal (YEXEC_HARD, YEXEC_YES, YEXEC_YES, PROG_signal);
@@ -139,8 +188,8 @@ PROG_begin         (void)
    return 0;
 }
 
-char         /*--> prepare interactive environment -------[ leaf   [ ------ ]-*/
-PROG_final              (void)
+char         /*--> prepare visual/interactive env --------[ leaf   [ ------ ]-*/
+PROG_visual             (void)
 {
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
@@ -151,12 +200,10 @@ PROG_final              (void)
 
 
 
-
 /*====================------------------------------------====================*/
-/*===----                          main driver                         ----===*/
+/*===----                       specialty functions                    ----===*/
 /*====================------------------------------------====================*/
-
-char sweep (void);
+static void      o___SPECIALTY_______________o (void) {;}
 
 void             /* [------] receive signals ---------------------------------*/
 PROG_signal        (int a_signal, siginfo_t *a_info, void *a_nada)
@@ -173,6 +220,64 @@ PROG_signal        (int a_signal, siginfo_t *a_info, void *a_nada)
    /*---(complete)-----------------------*/
    return;
 }
+
+char         /*--> daemonize the program -------------------------------------*/
+PROG_daemon        (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         rce         =  -10;
+   int         rc          =    0;
+   int         x_running   =    0;
+   int         x_uid       =    0;
+   /*---(header)-------------------------*/
+   DEBUG_ENVI   yLOG_enter   (__FUNCTION__);
+   /*---(check for other)----------------*/
+   x_running = yEXEC_find ("kharon", NULL);
+   DEBUG_ENVI   yLOG_value   ("x_running" , x_running);
+   --rce;  if (x_running > 1) {
+      printf ("already running in daemon mode\n");
+      DEBUG_ENVI   yLOG_note    ("already running in daemon mode");
+      DEBUG_ENVI   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check for user)-----------------*/
+   DEBUG_ENVI   yLOG_value   ("my.uid"    , my.uid);
+   --rce;  if (my.uid != 0) {
+      printf ("only root can run in daemon mode\n");
+      DEBUG_ENVI   yLOG_note    ("only root can run in daemon mode");
+      DEBUG_ENVI   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(fork off and die)---------------*/
+   DEBUG_ENVI   yLOG_value   ("logger"    , yURG_lognum ());
+   rc = yEXEC_daemon (yURG_lognum (), &my.pid);
+   DEBUG_ENVI   yLOG_value   ("daemon"    , rc);
+   --rce;  if (rc < 0) {
+      printf ("could not be daemonized\n");
+      DEBUG_ENVI   yLOG_note    ("could not be daemonized");
+      DEBUG_ENVI   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(signals)-------------------------------*/
+   rc = yEXEC_signal (YEXEC_HARD, YEXEC_NO, YEXEC_NO, PROG_signal);
+   DEBUG_ENVI   yLOG_value   ("signals"   , rc);
+   --rce;  if (rc < 0) {
+      printf ("sigals could not be set properly\n");
+      DEBUG_ENVI   yLOG_note    ("signals cound not be set properly");
+      DEBUG_ENVI   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)------------------------------*/
+   DEBUG_ENVI   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                        program shutdown                      ----===*/
+/*====================------------------------------------====================*/
+static void      o___SHUTDOWN________________o (void) {;}
 
 char         /*--: wrapup program execution --------------[ leaf   [ ------ ]-*/
 PROG_end           (void)

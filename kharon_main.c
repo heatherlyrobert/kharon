@@ -15,12 +15,19 @@ main               (int a_argc, char *a_argv[])
    if (rc >= 0)  rc = PROG_init    ();
    if (rc >= 0)  rc = PROG_args    (a_argc, a_argv);
    if (rc >= 0)  rc = PROG_begin   ();
-   if (rc >= 0)  rc = PROG_final   ();
+   if (rc >= 0)  rc = PROG_visual  ();
    /*---(defense)------------------------*/
    DEBUG_PROG  yLOG_value   ("startup"   , rc);
    if (rc <  0) {
       DEBUG_PROG  yLOG_exitr   (__FUNCTION__, rc);
       PROG_end ();
+      return rc;
+   }
+   /*---(daemon mode)--------------------*/
+   rc = PROG_daemon ();
+   DEBUG_PROG  yLOG_value   ("daemon"    , rc);
+   if (rc < 0)  {
+      DEBUG_PROG  yLOG_exitr   (__FUNCTION__, rc);
       return rc;
    }
    /*---(sweep for complete)-------------*/
