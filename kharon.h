@@ -7,9 +7,9 @@
 #define     P_NICHE     "rt (process one run-time)"
 #define     P_PURPOSE   "consistent, reliable handling of terminated processes"
 
-#define     P_NAMESAKE  "kharon (rosy-fingered dawn)"
-#define     P_HERITAGE  "haides' ferryman, carrying the dead across the rivers of hell"
-#define     P_IMAGERY   "ugly, bearded man in a conical hat, piloting a skiff with a pole"
+#define     P_NAMESAKE  "kharon-daimon (ferryman of the dead)"
+#define     P_HERITAGE  "haides ferryman, carrying the dead across the rivers of hell"
+#define     P_IMAGERY   "ugly, bearded man in a conical hat, polling a black skiff"
 
 #define     P_SYSTEM    "gnu/linux   (powerful, ubiquitous, technical, and hackable)"
 #define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
@@ -19,8 +19,8 @@
 #define     P_CREATED   "2010-10"
 #define     P_DEPENDS   "yEXEC, ySTR"
 
-#define     P_VERNUM    "2.0a"
-#define     P_VERTXT    "breakout from initd source tree"
+#define     P_VERNUM    "2.0b"
+#define     P_VERTXT    "added standard prog functions and debugging protection"
 
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
@@ -36,26 +36,6 @@
  */
 
 
-/*===[[ HEADER ]]=============================================================*/
-/*
- *   focus         : (--) -----------
- *   niche         : (--) -----------
- *   heritage      : kharon (ferryman of the dead, "k-air-ahn")
- *   purpose       : consistent, reliable handling of terminated processes
- *
- *   base_system   : gnu/linux   (powerful, ubiquitous, technical, and hackable)
- *   lang_name     : ansi-c      (wicked, limitless, universal, and everlasting)
- *   dependencies  : yEXEC (static), yLOG (static)
- *   size          : micro       (less than 200 slocL)
- * 
- *   author        : rsheatherly
- *   created       : 2010-10
- *   priorities    : direct, simple, brief, vigorous, and lucid (h.w. fowler)
- *   end goal      : loosely coupled, strict interface, maintainable, portable
- *
- *   simplicity is prerequisite for reliability and security; but logging,
- *   tracing, and unit testing are signs of true wisdom
- */
 
 /*===[[ SUMMARY ]]============================================================*/
 /*

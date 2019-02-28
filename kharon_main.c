@@ -18,10 +18,10 @@ main               (int a_argc, char *a_argv[])
    if (rc >= 0)  rc = PROG_final   ();
    /*---(defense)------------------------*/
    DEBUG_PROG  yLOG_value   ("startup"   , rc);
-   --rce;  if (rc <  0) {
-      DEBUG_PROG  yLOG_exitr   (__FUNCTION__, rce);
+   if (rc <  0) {
+      DEBUG_PROG  yLOG_exitr   (__FUNCTION__, rc);
       PROG_end ();
-      return rce;
+      return rc;
    }
    /*---(sweep for complete)-------------*/
    while (1) {
