@@ -9,13 +9,10 @@ main               (int a_argc, char *a_argv[])
    /*---(locals)-----------+-----+-----+-*/
    char        rc          = 0;        /* return code (char)                  */
    /*---(initialize)---------------------*/
-   if (rc >= 0)  rc = PROG_preinit ();
    if (rc >= 0)  rc = yURG_logger  (a_argc, a_argv);
    if (rc >= 0)  rc = yURG_urgs    (a_argc, a_argv);
-   if (rc >= 0)  rc = PROG_init    ();
+   if (rc >= 0)  rc = PROG_init    (a_argc, a_argv);
    if (rc >= 0)  rc = PROG_args    (a_argc, a_argv);
-   if (rc >= 0)  rc = PROG_begin   ();
-   if (rc >= 0)  rc = PROG_visual  ();
    /*---(defense)------------------------*/
    DEBUG_PROG  yLOG_value   ("startup"   , rc);
    if (rc <  0) {
@@ -32,6 +29,7 @@ main               (int a_argc, char *a_argv[])
    }
    /*---(sweep for complete)-------------*/
    while (1) {
+      yEXEC_heartbeat (my.pid, time (NULL), FILE_HEARTBEAT, my.heartbeat);
       sweep ();
       sleep (my.delay);
    }

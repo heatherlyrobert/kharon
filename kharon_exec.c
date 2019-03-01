@@ -2,6 +2,82 @@
 #include      "kharon.h"
 
 
+
+
+char
+exec_mode               (char *a_name, char a_mode)
+{
+   /*---(header)-------------------------*/
+   DEBUG_APIS   yLOG_senter  (__FUNCTION__);
+   /*---(update)-------------------------*/
+   strlcpy (my.run_desc, a_name + 2, LEN_LABEL);
+   DEBUG_APIS   yLOG_snote   (my.run_desc);
+   my.run_mode = a_mode;
+   DEBUG_APIS   yLOG_sint    (my.run_mode);
+   /*---(complete)-----------------------*/
+   DEBUG_APIS   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+exec_action             (char *a_name, char a_act)
+{
+   /*---(header)-------------------------*/
+   DEBUG_APIS   yLOG_senter  (__FUNCTION__);
+   /*---(update)-------------------------*/
+   strlcpy (my.act_desc, a_name + 2, LEN_LABEL);
+   DEBUG_APIS   yLOG_snote   (my.act_desc);
+   my.act_code = a_act;
+   DEBUG_APIS   yLOG_sint    (my.act_code);
+   /*---(complete)-----------------------*/
+   DEBUG_APIS   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+exec_speed              (char *a_name, int a_speed)
+{
+   /*---(header)-------------------------*/
+   DEBUG_APIS   yLOG_senter  (__FUNCTION__);
+   /*---(update)-------------------------*/
+   strlcpy (my.speed, a_name + 2, LEN_LABEL);
+   DEBUG_APIS   yLOG_snote   (my.speed);
+   my.delay = a_speed;
+   DEBUG_APIS   yLOG_sint    (my.delay);
+   /*---(complete)-----------------------*/
+   DEBUG_APIS   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+exec_river              (char *a_name)
+{
+   /*---(header)-------------------------*/
+   DEBUG_APIS   yLOG_senter  (__FUNCTION__);
+   /*---(update)-------------------------*/
+   strlcpy (my.river, a_name + 2, LEN_LABEL);
+   DEBUG_APIS   yLOG_snote   (my.river);
+   /*---(complete)-----------------------*/
+   DEBUG_APIS   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+exec_retitle            (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        t           [LEN_HUND];
+   /*---(header)-------------------------*/
+   DEBUG_APIS   yLOG_enter   (__FUNCTION__);
+   /*---(update)-------------------------*/
+   sprintf (t, "/sbin/kharon --%s --%s", my.river, my.speed);
+   rc = yEXEC_rename (my.cmdline, t, my.maxname);
+   /*---(complete)-----------------------*/
+   DEBUG_APIS   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
 char       /* PURPOSE : run through all processes ----------------------------*/
 sweep              (void)
 {

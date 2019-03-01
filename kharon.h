@@ -19,79 +19,54 @@
 #define     P_CREATED   "2010-10"
 #define     P_DEPENDS   "yEXEC, ySTR"
 
-#define     P_VERNUM    "2.0c"
-#define     P_VERTXT    "updated daemon process, non-duplication, and cleaned up PROG"
-
-#define     P_SUMMARY   \
- "kharon is a very specialized part of the init process, which handles¦" \
- "the collection of completed, killed, dead, and zombie processes during¦" \
- "normal operation of the system.¦"
+#define     P_VERNUM    "2.0d"
+#define     P_VERTXT    "cleaned up and unit tested PROG_args setting"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
 #define     P_REMINDER  "i know there are many better options, but i *own* this one"
 
-#define     P_ASSUME    \
- "-- all init startup operations handled by eos (rosy-fingered dawn)¦" \
- "-- all init shutdown operations handled by astraios (starry one)¦" \
- "-- all init resurrection operations handled by haides¦" \
- "-- zero configuration and limited command line options¦" \
- "-- communication of state changes through signals, not fifo or pipe¦"
-
+#define     P_GREEK     \
+ "kharon (k-air-ahn) is the ferryman of haides who carries souls of the newly¦" \
+ "deceased across the river acheron (pain/sorrow) which is one of the five¦" \
+ "rivers of hell -- styx (hate/oath), lethe (oblivion/forgetfulness),¦" \
+ "phlegethon (fire/blood), and cocytus (wailing/lamentation) -- that divided the¦" \
+ "world of the living from the world of the dead.  kharon is the son of erebus¦" \
+ "(darkness) and nyx (night).  kharon continues in modern folklore as the¦" \
+ "angel of death.¦"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 
+#define     P_SUMMARY   \
+ "kharon is a very specialized part of the init process, which handles¦" \
+ "the collection of completed, killed, dead, and zombie processes during¦" \
+ "normal operation of the system.¦"
+#define     P_CURRENT   \
+ "there are a number of competing init systems which cover a wide range of¦" \
+ "capabilities -- startup, shutdown, resurrection, collection, and in some¦" \
+ "cases event, resource, and time-based launching of processes.¦"
+#define     P_ALTERNS   "sysvinit,openrc,systemd,upstart,runit,minirc,minit"
+#define     P_CONCERN   \
+ "init has evolved into a kitchen-sink and gone beyond mere mortals to¦" \
+ "maintain and control requiring secondard packages of macros, scripts,¦" \
+ "and configuration.  the economies of scale argument always ends in a mess.¦"
+#define     P_USERBASE  \
+ "never confuse tailored, technical, super-user systems and general, easy-¦" \
+ "to-use, zero effort required systems built to get end-users up and happy¦" \
+ "as quickly as possible.¦"
+#define     P_COURSE    \
+ "no way.  this is not the unix way of focused, narrow processes linked to¦" \
+ "handle complex situations.  i will break init into startup, shutdown,¦" \
+ "run-time, ressurection, and leave cron separate.¦"
+#define     P_ASSUME    \
+ "-- all init startup operations handled by eos (rosy-fingered dawn)¦" \
+ "-- all init shutdown operations handled by astraios (dusk, dawn of stars)¦" \
+ "-- all init resurrection (serial) operations handled by haides¦" \
+ "-- zero configuration and limited command line options¦" \
+ "-- will never run or launch any processes or need serious security access¦" \
+ "-- communication of state changes through signals, not fifo or pipe¦"
 
 
-/*===[[ SUMMARY ]]============================================================*/
-/* 
- *   eos is intended to be a clean, reliable, and light system initialization
- *   process to receive the hand off from the kernel and deliver a stable,
- *   secure, and well prepared system for use to kharon who will watch over
- *   the system while it is running.
- */
-
-
-
-/*===[[ SUMMARY ]]============================================================*/
-/*
- *   kharon is a very focused element of the init system who's only purpose is
- *   to ferry dead processes and zombies out of the running system.  kharon is
- *   started by eos (rosy-fingered dawn) and then turns over control to
- *   astraeus (dusk, dawn of stars) at system shutdown.
- *
- */
-
-/*===[[ DESIGN GOALS ]]=======================================================*/
-/*
- *   kharon has a very specific, focused domai and it MUST stay functioning.
- *   so, it will require...
- *      -- very simple coding
- *      -- no input or configuration files
- *      -- all libraries are staticly linked
- *      -- no options
- *      -- very limited requirements and dependencies
- *      -- very limited security access
- *      -- will never run or launch anything
- *      -- kharon ALWAYS logs
- *
- */
-
-/*===[[ MYTHOS ]]=============================================================*/
-/*
- *   kharon is the ferryman of hades who carries souls of the newly deceased
- *   across the river acheron (pain/sorrow) which is one of the five rivers of
- *   hell with the styx (hate/oath), lethe (oblivion/forgetfulness),
- *   phlegethon (fire/blood), and cocytus (wailing/lamentation) that divided the
- *   world of the living from the world of the dead.
- *
- *   kharon is the son of erebus (darkness) and nyx (night).
- *
- *   kharon continues in modern folklore as the angel of death.
- *
- *   pronounced as "k-air-ahn"
- *
- */
 /*===[[ BACKGROUD ]]==========================================================*/
 
 /*   this element of the init system (post startup) normally handles several
@@ -162,12 +137,44 @@
 #include    <utmp.h>              /* utmp, btmp, and wtmp tracking            */
 
 /*---(structures)-----------------------------------------------*/
+typedef struct stat      tSTAT;
+
+
+
+/*---(run_mode)---------------------------------*/
+#define     MODE_VERIFY      'v'            /* verification and review        */
+#define     MODE_DAEMON      'd'            /* normal daemon (default)        */
+#define     MODE_CONTROL     'c'            /* send messages to the daemon    */
+#define     MODE_UNIT        'u'            /* unit testing settings          */
+#define     MODE_VALID       "vdcu"
+
+/*---(actions)----------------------------------*/
+#define     ACT_NONE         '-'            /* no action                      */
+#define     ACT_NEWCODE      'n'            /* update with new version        */
+#define     ACT_DEBUG        'd'            /* switch to debug version        */
+#define     ACT_PROD         'p'            /* switch to production/clean     */
+#define     ACT_SHUTDOWN     's'            /* switch to astreios/shutdown    */
+#define     ACT_VALID        "-ndps"
+
+#define     FILE_HEARTBEAT   "/run/kharon.heartbeat"
+
 
 typedef  struct cACCESSOR tACCESSOR;
 struct cACCESSOR
 {
-   char        version       [500];         /* program version string         */
+   /*---(behavior)-------------*/
+   char        run_desc      [LEN_LABEL];   /* mode description               */
+   char        run_mode;                    /* user, daemon, control, unit    */
+   char        speed         [LEN_LABEL];   /* speed/pace of checks           */
    int         delay;                       /* delay in seconds               */
+   char        river         [LEN_LABEL];   /* river of hell                  */
+   char        act_desc      [LEN_LABEL];   /* action description             */
+   char        act_code;                    /* action code                    */
+   /*---(master)---------------*/
+   char        heartbeat     [LEN_HUND];    /* heartbeat string               */
+   char       *cmdline;                     /* system command line position   */
+   int         maxname;                     /* maximum command line size      */
+   char        version       [500];         /* program version string         */
    /*---(owner)----------------*/
    int         pid;                         /* process id of eos              */
    int         ppid;                        /* parent process id of eos       */
@@ -210,6 +217,7 @@ typedef struct rusage    tRUSAGE;
 typedef struct dirent    tDIRENT;
 
 
+extern      char        unit_answer [LEN_RECD];
 
 
 /*---(program)--------------*/
@@ -219,16 +227,28 @@ char*       PROG_version            (void);
 char        PROG_vershow            (void);
 char        PROG_about              (void);
 /*---(startup)-----------------*/
-char        PROG_preinit            (void);
-char        PROG_init               (void);
+char        PROG_init               (int a_argc, char *a_argv []);
 char        PROG_args               (int a_argc, char *a_argv[]);
-char        PROG_begin              (void);
-char        PROG_visual             (void);
 /*---(specialty)---------------*/
 void        PROG_signal             (int a_signal, siginfo_t *a_info, void *a_nada);
 char        PROG_daemon             (void);
 /*---(shutdown)----------------*/
 char        PROG_end                (void);
+/*---(unit test)---------------*/
+char*       prog__unit              (char *a_question, int a_num);
+char        prog__unit_quiet        (void);
+char        prog__unit_loud         (void);
+char        prog__unit_end          (void);
+
+char        exec_mode               (char *a_name, char a_mode);
+char        exec_action             (char *a_name, char a_act);
+char        exec_speed              (char *a_name, int a_speed);
+char        exec_river              (char *a_name);
+char        exec_retitle            (void);
+
+char        fifo_verify             (void);
+char        fifo_listen             (void);
+char        fifo_speak              (void);
 
 
 #endif
